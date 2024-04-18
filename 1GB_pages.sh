@@ -1,12 +1,19 @@
 #!/bin/sh -e
 
-# https://xmrig.com/docs/miner/hugepages#onegb-huge-pages
-
 sysctl -w vm.nr_hugepages=$(nproc)
 
-for i in $(find /sys/devices/system/node/node* -maxdepth 0 -type d);
-do
-    echo 3 > "$i/hugepages/hugepages-1048576kB/nr_hugepages";
-done
+# Check for root privileges
+if [ "$(id -u)" != "0" ]; then
+   echo "This script must be run as root." 1>&2
+   exit 1
+fi
 
-echo "1GB pages successfully enabled"
+# Configure 1GB hugepages
+echo "Configuring 1GB hugepages..."
+echo $NUM_HUGEPAGES > /proc/sys/vm/nr_hugepages
+
+# Verify the configuration
+echo "Verifying 1GB hugepages allocation..."
+grep -e HugePages_Total -e Hugepagesize /proc/meminfo
+
+echo "If allocation is not successful, check available memory and try again."

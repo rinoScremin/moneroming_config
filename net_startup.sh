@@ -38,7 +38,20 @@ fi
 echo "Wireless interface found: $WIRELESS_INTERFACE"
 
 # Rest of the script for setting up the network...
-# ...
+# Start WPA Supplicant.
+sudo wpa_supplicant -B -D wext -i $INTERFACE -c $WPA_CONF
+
+# Request an IP address.
+sudo udhcpc -i $INTERFACE
+
+# Set Google DNS.
+echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
+
+# Test internet connectivity.
+if ping -c 4 google.com; then
+    echo "Internet connectivity established."
+else
+    echo "Failed to establish internet connectivity."
 
 # Start WPA Supplicant using the found interface.
 sudo wpa_supplicant -B -D wext -i $WIRELESS_INTERFACE -c /etc/wpa_supplicant.conf

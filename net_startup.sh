@@ -1,56 +1,71 @@
 #!/bin/bash
 
-# Check for the WiFi password parameter
+# Check for the WiFi password parameter.
 if [ "$#" -ne 1 ]; then
     echo "Usage: $0 <WiFi-Password>"
     exit 1
 fi
 
-# Assign the WiFi password from the script's parameter
+# Assign the WiFi password from the script's parameter.
 WIFI_PASSWORD=$1
 
-# Step 1: Identify the network hardware
+# Function to check and load firmware.
+load_firmware() {
+    local FIRMWARE=$1
+    tce-load -wi $FIRMWARE
+    if [ $? -eq 0 ]; then
+        echo "$FIRMWARE loaded successfully."
+        return 0
+    else
+        echo "Failed to load $FIRMWARE."
+        return 1
+    fi
+}
+
+# Step 1: Identify the network hardware.
 echo "Finding network hardware..."
-NETWORK_HARDWARE=$(lspci | grep -i network)
-echo "Network hardware found: $NETWORK_HARDWARE"
+HW_DESCRIPTION=$(lspci | grep -i network)
 
-# Determine the appropriate firmware to load based on the detected hardware
-if echo "$NETWORK_HARDWARE" | grep -iq "atheros"; then
-    FIRMWARE="firmware-atheros"
-elif echo "$NETWORK_HARDWARE" | grep -iq "broadcom"; then
-    FIRMWARE="firmware-broadcom"
+# Check if it's Atheros hardware.
+if echo "$HW_DESCRIPTION" | grep -iq "atheros"; then
+    echo "Atheros network hardware detected."
+    load_firmware firmware-atheros && exit 0
+fi
+
+# Check if it's Broadcom hardware and attempt to load each firmware.
+if echo "$HW_DESCRIPTION" | grep -iq "broadcom"; then
+    echo "Broadcom network hardware detected."
+    BROADCOM_FIRMWARES=("firmware-broadcom_bcm43xx" "firmware-broadcom_bnx2" "firmware-broadcom_bnx2x")
+    
+    for FW in "${BROADCOM_FIRMWARES[@]}"; do
+        echo "Attempting to load $FW..."
+        if load_firmware $FW; then
+            echo "$FW successfully loaded, continuing with network setup..."
+            break
+        fi
+    done
+fi
+
+# Assuming wlan0 is the wireless interface, if not, change as needed.
+INTERFACE="wlan0"
+
+# Generate WPA Supplicant configuration.
+WPA_CONF="/etc/wpa_supplicant.conf"
+echo -e "network={\n\tssid=\"SCREMIN\"\n\tpsk=\"$WIFI_PASSWORD\"\n}" | sudo tee $WPA_CONF
+
+# Start WPA Supplicant.
+sudo wpa_supplicant -B -D wext -i $INTERFACE -c $WPA_CONF
+
+# Request an IP address.
+sudo udhcpc -i $INTERFACE
+
+# Set Google DNS.
+echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
+
+# Test internet connectivity.
+if ping -c 4 google.com; then
+    echo "Internet connectivity established."
 else
-    echo "Unsupported network hardware. Exiting."
+    echo "Failed to establish internet connectivity."
     exit 1
 fi
-
-# Step 2: Attempt to load the firmware
-echo "Loading $FIRMWARE..."
-tce-load -wi $FIRMWARE
-
-# Check if the firmware load was successful
-if [ $? -eq 0 ]; then
-    echo "Firmware loaded successfully."
-else
-    echo "Failed to load firmware. Please check if it's already installed or available."
-    exit 1
-fi
-
-# Rest of the steps will depend on the specific firmware and setup required for the network hardware detected
-# They typically involve loading the kernel module for the wireless device, configuring wpa_supplicant,
-# and obtaining an IP address through DHCP
-
-# Replace wlan0 with the correct wireless interface if different
-# This is a placeholder for additional commands required for Broadcom or other hardware
-
-# Final step: Test the connection
-echo "Testing connection..."
-ping -c 4 google.com
-
-if [ $? -eq 0 ]; then
-    echo "Internet connectivity looks good!"
-else
-    echo "Failed to connect to the Internet."
-fi
-
-# End of the script

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Number of hugepages you want to allocate
-NUM_HUGEPAGES=4
+NUM_HUGEPAGES=$(nproc)
 
 # Size of the huge pages, default to 1G if supported, otherwise 2M
 HUGEPAGESIZE="1G"

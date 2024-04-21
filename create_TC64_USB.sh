@@ -43,7 +43,7 @@ set max_hd=10 # Maximum number of drives to check
 
 # Function to find and set root to the drive with /boot directory
 function find_and_set_root {
-    for i in `seq 0 $max_hd`; do
+    for i in `seq 0 10`; do
         # Check if the drive exists by trying to list its contents
         if [ -e (hd${i}) ]; then
             echo "Checking (hd${i})..."

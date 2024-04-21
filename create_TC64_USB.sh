@@ -14,7 +14,7 @@ tce-load -wi gdisk
 wget http://tinycorelinux.net/15.x/x86_64/release/CorePure64-current.iso || { echo "Download failed"; exit 1; }
 
 # Automatically configure disk partitioning
-echo -e "o\nY\nn\n\n\n\n+1G\nEF00\nw\nY\n" | sudo gdisk /dev/sdb
+echo -e "o\nY\nn\n\n\n\n\nEF00\nw\nY\n" | sudo gdisk /dev/sdb
 
 # Format the new partition (assuming it is /dev/sdb1)
 sudo mkfs.fat -F 32 -I /dev/sdb
@@ -35,7 +35,7 @@ sudo cp /mnt/iso/boot/vmlinuz64 /mnt/usb/boot/
 sudo cp /mnt/iso/boot/corepure64.gz /mnt/usb/boot/
 
 # Create and write GRUB configuration
-cat <<EOF | sudo tee /mnt/usb/boot/grub/grub.cfg
+nano <<EOF | sudo tee /mnt/usb/boot/grub/grub.cfg
 
 set default=0
 set timeout=10

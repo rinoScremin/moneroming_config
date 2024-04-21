@@ -26,6 +26,16 @@ sudo mount /dev/sdb /mnt/usb
 # Install GRUB
 sudo grub-install --target=x86_64-efi --efi-directory=/mnt/usb --boot-directory=/mnt/usb/boot --removable
 
+cat <<EOF | sudo tee /mnt/usb/boot/grub/grub.cfg
+set default=0
+set timeout=10
+menuentry "Tiny Core64" {
+    set root=(hd0)
+    linux /boot/vmlinuz64 quiet waitusb=5 restore=sdb/tce/mydata.tgz
+    initrd /boot/corepure64.gz
+}
+EOF
+
 # Mount the ISO file
 sudo mkdir -p /mnt/iso
 sudo mount -o loop CorePure64-current.iso /mnt/iso

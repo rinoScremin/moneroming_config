@@ -5,9 +5,10 @@ set -euo pipefail
 
 # Install necessary packages
 tce-load -wi tc-install
-tce-load -wi grub2multi
+tce-load -wi grub2-multi.tcz
 tce-load -wi wget
 tce-load -wi nano
+tce-load -wi gdisk
 
 # Download the ISO, check for successful download
 wget http://tinycorelinux.net/15.x/x86_64/release/CorePure64-current.iso || { echo "Download failed"; exit 1; }
@@ -20,7 +21,7 @@ sudo mkfs.fat -F 32 -I /dev/sdb
 
 # Mount the USB drive
 sudo mkdir -p /mnt/usb
-sudo mount /dev/sdb1 /mnt/usb
+sudo mount /dev/sdb /mnt/usb
 
 # Install GRUB
 sudo grub-install --target=x86_64-efi --efi-directory=/mnt/usb --boot-directory=/mnt/usb/boot --removable

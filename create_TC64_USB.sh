@@ -29,26 +29,42 @@ sudo grub-install --target=x86_64-efi --efi-directory=/mnt/usb --boot-directory=
 cat << EOF >> /mnt/usb/boot/grub/grub.cfg
 set default=0
 set timeout=10
-menuentry 'Tiny Core64' {
-    set root=(hd0)
-    linux /boot/vmlinuz64 quiet waitusb=5 restore=sdb/tce/mydata.tgz
-    initrd /boot/corepure64.gz
+set max_hd=10 # Maximum number of drives to check
+# Function to find and set root to the drive with /boot directory
+function find_and_set_root {
+    for i in `seq 0 $max_hd`; do
+        # Check if the drive exists by trying to list its contents
+        if [ -e (hd${i}) ]; then
+            echo "Checking (hd${i})..."
+            # Check if /boot directory exists on this drive
+            if [ -d (hd${i})/boot ]; then
+                set root=(hd${i})
+                echo "Found /boot on (hd${i})"
+                break
+            fi
+        fi
+    done
+}
+menuentry "Tiny Core64" {
+    find_and_set_root
+    if [ "${root}" ]; then
+        echo "Booting from ${root}..."
+        linux /boot/vmlinuz64 quiet waitusb=5 restore=sdb/tce/mydata.tgz
+        initrd /boot/corepure64.gz
+    else
+        echo "Failed to find /boot directory on any drives."
+    fi
 }
 EOF
-
-
 # Mount the ISO file
 sudo mkdir -p /mnt/iso
 sudo mount -o loop CorePure64-current.iso /mnt/iso
-
 # Copy necessary files to the USB drive
 sudo cp /mnt/iso/boot/vmlinuz64 /mnt/usb/boot/
 sudo cp /mnt/iso/boot/corepure64.gz /mnt/usb/boot/
-
 # Unmount the USB drive and ISO
 sudo umount /mnt/usb
 sudo umount /mnt/iso
-
 # Complete setup
 echo "Tiny Core Linux is ready on the USB drive!"
 

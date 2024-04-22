@@ -18,6 +18,9 @@ cd git-lfs-3.5.1
 sudo mv git-lfs /usr/local/bin/
 sudo chmod +x /usr/local/bin/git-lfs
 
+git config --global user.email scremin49@gmail.com
+git config --global user.name rino
+
 #Installing the repo tool
 cd ~
 mkdir -p ~/bin/

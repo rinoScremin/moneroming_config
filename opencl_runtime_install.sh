@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -e
 # Installing git-lfs 
 
 #download git-lfs files 

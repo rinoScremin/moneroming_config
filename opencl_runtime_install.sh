@@ -32,7 +32,15 @@ sudo chmod a+x ~/bin/repo
 cd ~
 mkdir -p ~/ROCm/
 cd ~/ROCm/
+git clone https://github.com/ROCmSoftwarePlatform/MIOpen.git
+
 ~/bin/repo init -u http://github.com/ROCm/ROCm.git -b roc-6.0.x
+
+cd MIOpen
+git reset HEAD .
+git checkout .
+cd ..
+
 ~/bin/repo sync
 
 #build and install ROCm-OpenCL-Runtime

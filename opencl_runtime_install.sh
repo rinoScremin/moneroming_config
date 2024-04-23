@@ -7,6 +7,7 @@ tce-load -wi firmware-amd-ucode.tcz
 tce-load -wi xf86-video-amdgpu.tcz
 tce-load -wi python3.6-dev
 tce-load -wi openssh
+tce-load -wi firmware-radeon.tcz
 
 # Installing git-lfs 
 #download git-lfs files 

@@ -8,6 +8,13 @@ tce-load -wi xf86-video-amdgpu.tcz
 tce-load -wi python3.6-dev
 tce-load -wi openssh
 tce-load -wi firmware-radeon.tcz
+tce-load -wi Xorg-7.7-bin.tcz
+tce-load -wi Xorg-7.7-dev.tcz
+tce-load -wi Xorg-7.7-lib.tcz
+tce-load -wi Xorg-7.7.tcz
+tce-load -wi xorg-proto.tcz
+tce-load -wi xorg-server-dev.tcz
+tce-load -wi xorg-server.tcz
 
 # Installing git-lfs 
 #download git-lfs files 
@@ -42,9 +49,25 @@ mkdir build
 cd build
 
 #project(MyProjectName LANGUAGES C CXX)
+
 set +e
 sudo sed -i 's/project (OPENCL_ICD_LOADER)/project (OPENCL_ICD_LOADER LANGUAGES C CXX)/' ../CMakeLists.txt
 set -e
+
+set +e
+sudo sed -i 's/int ret_val;/extern int ret_val;)/' ../load_test/file.c
+set -e
+
+set +e
+sudo sed -i 's/int ret_val;/extern int ret_val;)/' ../load_test/file.c
+set -e
+
+set +e
+sudo sed -i 's/int ret_val;/extern int ret_val;)/' ../load_test/file.c
+set -e
+
+
+
 cmake -DOPENCL_ICD_LOADER_HEADERS_DIR=/tmp/tcloop/opencl-headers/usr/local/include/CL ..
 make clean 
 make

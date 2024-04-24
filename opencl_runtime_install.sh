@@ -55,15 +55,15 @@ sudo sed -i 's/project (OPENCL_ICD_LOADER)/project (OPENCL_ICD_LOADER LANGUAGES 
 set -e
 
 set +e
-sudo sed -i 's/int ret_val;/extern int ret_val;)/' ../load_test/file.c
+sudo sed -i 's/int ret_val;/static int ret_val;)/' ../test/loader_test/test_buffer_object.c
 set -e
 
 set +e
-sudo sed -i 's/int ret_val;/extern int ret_val;)/' ../load_test/file.c
+sudo sed -i 's/cl_int ret_val;/extern cl_int ret_val;)/' ../test/loader_test/test_cl_runtime.c
 set -e
 
 set +e
-sudo sed -i 's/int ret_val;/extern int ret_val;)/' ../load_test/file.c
+sudo sed -i 's/cl_int ret_val;/extern cl_int ret_val;)/' ../test/loader_test/test_clgl.c 
 set -e
 
 

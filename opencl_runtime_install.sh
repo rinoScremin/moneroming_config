@@ -66,7 +66,21 @@ set +e
 sudo sed -i 's/cl_int ret_val;/extern cl_int ret_val;)/' ../test/loader_test/test_clgl.c 
 set -e
 
+set +e
+sudo sed -i 's/int ret_val;/extern int ret_val;)/' ../test/loader_test/test_image_object.c 
+set -e
 
+set +e
+sudo sed -i 's/int ret_val;/extern int ret_val;)' ../test/loader_test/test_platforms.c
+set -e
+
+set +e
+sudo sed -i 's/int ret_val;/extern int ret_val;)' ../test/loader_test/test_program_objects.c
+set -e
+
+set +e
+sudo sed -i 's/int ret_val;/extern int ret_val;)/' ../test/loader_test/test_sampler_objects.c
+set -e
 
 cmake -DOPENCL_ICD_LOADER_HEADERS_DIR=/tmp/tcloop/opencl-headers/usr/local/include/CL ..
 make clean 

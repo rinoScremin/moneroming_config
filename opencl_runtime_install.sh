@@ -43,6 +43,7 @@ cd build
 
 #project(MyProjectName LANGUAGES C CXX)
 cmake -DOPENCL_ICD_LOADER_HEADERS_DIR=/tmp/tcloop/opencl-headers/usr/local/include/CL ..
+make clean 
 make
 
 # Copy the libraries

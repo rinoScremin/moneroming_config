@@ -37,7 +37,7 @@ cd ~/ROCm/
 ~/bin/repo sync
 
 #build and install ROCm-OpenCL-Runtime
-cd ~/ROCm/ROCm-OpenCL-Runtime
+cd ~/ROCm/ROCm-OpenCL-Runtime/api/opencl/khronos/icd
 mkdir build
 cd build
 

@@ -42,6 +42,9 @@ mkdir build
 cd build
 
 #project(MyProjectName LANGUAGES C CXX)
+set +e
+sudo sed -i 's/project (OPENCL_ICD_LOADER)/project (OPENCL_ICD_LOADER LANGUAGES C CXX)/' ../CMakeLists.txt
+set -e
 cmake -DOPENCL_ICD_LOADER_HEADERS_DIR=/tmp/tcloop/opencl-headers/usr/local/include/CL ..
 make clean 
 make

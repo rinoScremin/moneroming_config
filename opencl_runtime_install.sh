@@ -52,7 +52,7 @@ cd build
 #project(MyProjectName LANGUAGES C CXX)
 
 # Correct the CMakeLists.txt file and test files for proper compilation
-sed -i 's/project (OPENCL_ICD_LOADER)/project (OPENCL_ICD_LOADER LANGUAGES C CXX)/' ../CMakeLists.txt
+sudo sed -i 's/project (OPENCL_ICD_LOADER)/project (OPENCL_ICD_LOADER LANGUAGES C CXX)/' ../CMakeLists.txt
 
 # Apply the corrections for 'ret_val'
 set +e  # Allow errors

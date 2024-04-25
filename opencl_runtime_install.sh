@@ -16,6 +16,8 @@ tce-load -wi Xorg-7.7.tcz
 tce-load -wi xorg-proto.tcz
 tce-load -wi xorg-server-dev.tcz
 tce-load -wi xorg-server.tcz
+tce-load -wi gnupg.tcz
+tce-load -wi gnu-efi-dev.tcz 
 
 # Installing git-lfs 
 #download git-lfs files 

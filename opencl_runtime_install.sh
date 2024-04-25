@@ -50,37 +50,19 @@ cd build
 
 #project(MyProjectName LANGUAGES C CXX)
 
-set +e
-sudo sed -i 's/project (OPENCL_ICD_LOADER)/project (OPENCL_ICD_LOADER LANGUAGES C CXX)/' ../CMakeLists.txt
-set -e
+# Correct the CMakeLists.txt file and test files for proper compilation
+sed -i 's/project (OPENCL_ICD_LOADER)/project (OPENCL_ICD_LOADER LANGUAGES C CXX)/' ../CMakeLists.txt
 
-set +e
-sudo sed -i 's/int ret_val;/static int ret_val;)/' ../test/loader_test/test_buffer_object.c
-set -e
-
-set +e
-sudo sed -i 's/cl_int ret_val;/extern cl_int ret_val;)/' ../test/loader_test/test_cl_runtime.c
-set -e
-
-set +e
-sudo sed -i 's/cl_int ret_val;/extern cl_int ret_val;)/' ../test/loader_test/test_clgl.c 
-set -e
-
-set +e
-sudo sed -i 's/int ret_val;/extern int ret_val;)/' ../test/loader_test/test_image_object.c 
-set -e
-
-set +e
-sudo sed -i 's/int ret_val;/extern int ret_val;)' ../test/loader_test/test_platforms.c
-set -e
-
-set +e
-sudo sed -i 's/int ret_val;/extern int ret_val;)' ../test/loader_test/test_program_objects.c
-set -e
-
-set +e
-sudo sed -i 's/int ret_val;/extern int ret_val;)/' ../test/loader_test/test_sampler_objects.c
-set -e
+# Apply the corrections for 'ret_val'
+set +e  # Allow errors
+sudo sed -i 's/int ret_val;/static int ret_val;/' ../test/loader_test/test_buffer_object.c
+sudo sed -i 's/cl_int ret_val;/extern cl_int ret_val;/' ../test/loader_test/test_cl_runtime.c
+sudo sed -i 's/cl_int ret_val;/extern cl_int ret_val;/' ../test/loader_test/test_clgl.c
+sudo sed -i 's/int ret_val;/extern int ret_val;/' ../test/loader_test/test_image_object.c
+sudo sed -i 's/int ret_val;/extern int ret_val;/' ../test/loader_test/test_platforms.c
+sudo sed -i 's/int ret_val;/extern int ret_val;/' ../test/loader_test/test_program_objects.c
+sudo sed -i 's/int ret_val;/extern int ret_val;/' ../test/loader_test/test_sampler_objects.c
+set -e  # Stop allowing errors
 
 cmake -DOPENCL_ICD_LOADER_HEADERS_DIR=/tmp/tcloop/opencl-headers/usr/local/include/CL ..
 make clean 
@@ -95,12 +77,16 @@ sudo cp libOpenCL.so.1 /usr/local/lib
 sudo ln -sf /usr/local/lib/libOpenCL.so.1.2 /usr/local/lib/libOpenCL.so
 sudo ln -sf /usr/local/lib/libOpenCL.so.1.2 /usr/local/lib/libOpenCL.so.1
 
+# Ensure the OpenCL ICD loader will find the ROCm OpenCL implementation
 sudo mkdir -p /etc/OpenCL/vendors/
 echo "/usr/local/lib/libOpenCL.so" | sudo tee /etc/OpenCL/vendors/amdocl64.icd
+
+# Set OCL_ICD_FILENAMES for the current and future sessions
 export OCL_ICD_FILENAMES=/etc/OpenCL/vendors/amdocl64.icd
+echo "export OCL_ICD_FILENAMES=$OCL_ICD_FILENAMES" | sudo tee -a /etc/profile.d/rocm.sh
 
 # Update the linker cache
 sudo ldconfig
 
-echo "ROCm-OpenCL-Runtime now available!"
-
+# Confirmation message
+echo "ROCm-OpenCL-Runtime is now available!"

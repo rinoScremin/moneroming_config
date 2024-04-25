@@ -56,10 +56,9 @@ sudo sed -i 's/project (OPENCL_ICD_LOADER)/project (OPENCL_ICD_LOADER LANGUAGES 
 
 # Apply the corrections for 'ret_val'
 set +e  # Allow errors
-sudo sed -i 's/int ret_val;/static int ret_val;/' ../test/loader_test/test_buffer_object.c
 sudo sed -i 's/cl_int ret_val;/extern cl_int ret_val;/' ../test/loader_test/test_cl_runtime.c
 sudo sed -i 's/cl_int ret_val;/extern cl_int ret_val;/' ../test/loader_test/test_clgl.c
-sudo sed -i 's/int ret_val;/extern int ret_val;/' ../test/loader_test/test_image_object.c
+sudo sed -i 's/int ret_val;/extern int ret_val;/' ../test/loader_test/test_image_objects.c
 sudo sed -i 's/int ret_val;/extern int ret_val;/' ../test/loader_test/test_platforms.c
 sudo sed -i 's/int ret_val;/extern int ret_val;/' ../test/loader_test/test_program_objects.c
 sudo sed -i 's/int ret_val;/extern int ret_val;/' ../test/loader_test/test_sampler_objects.c

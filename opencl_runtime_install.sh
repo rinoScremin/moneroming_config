@@ -95,6 +95,10 @@ sudo cp libOpenCL.so.1 /usr/local/lib
 sudo ln -sf /usr/local/lib/libOpenCL.so.1.2 /usr/local/lib/libOpenCL.so
 sudo ln -sf /usr/local/lib/libOpenCL.so.1.2 /usr/local/lib/libOpenCL.so.1
 
+sudo mkdir -p /etc/OpenCL/vendors/
+echo "/usr/local/lib/libOpenCL.so" | sudo tee /etc/OpenCL/vendors/amdocl64.icd
+export OCL_ICD_FILENAMES=/etc/OpenCL/vendors/amdocl64.icd
+
 # Update the linker cache
 sudo ldconfig
 

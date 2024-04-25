@@ -19,6 +19,15 @@ tce-load -wi xorg-server.tcz
 tce-load -wi gnupg.tcz
 tce-load -wi gnu-efi-dev.tcz 
 
+# Installing Khronos OpenCL Headers
+cd ~
+git clone https://github.com/KhronosGroup/OpenCL-Headers.git
+cd OpenCL-Headers
+mkdir build 
+cd build
+cmake ..
+make
+
 # Installing git-lfs 
 #download git-lfs files 
 cd ~
@@ -66,7 +75,7 @@ sudo sed -i 's/int ret_val;/extern int ret_val;/' ../test/loader_test/test_progr
 sudo sed -i 's/int ret_val;/extern int ret_val;/' ../test/loader_test/test_sampler_objects.c
 set -e  # Stop allowing errors
 
-cmake -DOPENCL_ICD_LOADER_HEADERS_DIR=/tmp/tcloop/opencl-headers/usr/local/include/CL ..
+cmake -DOPENCL_ICD_LOADER_HEADERS_DIR=~/OpenCL-Headers/build/OpenCLHeaders ..
 make clean 
 make
 

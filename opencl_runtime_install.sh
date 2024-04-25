@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -x
 
 # make sure firmware is installed 
 tce-load -wi firmware-amdgpu.tcz

@@ -52,7 +52,7 @@ sudo chmod a+x ~/bin/repo
 cd ~
 mkdir -p ~/ROCm/
 cd ~/ROCm/
-y "" | ~/bin/repo init -u http://github.com/ROCm/ROCm.git -b roc-6.0.x
+~/bin/repo init -u http://github.com/ROCm/ROCm.git -b roc-6.0.x
 ~/bin/repo sync
 
 #build and install ROCm-OpenCL-Runtime

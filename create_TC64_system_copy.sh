@@ -31,7 +31,7 @@ sudo grub-install --target=x86_64-efi --efi-directory=/mnt/usb --boot-directory=
 # Copy necessary files to the USB drive
 sudo cp /mnt/sdb/boot/vmlinuz64 /mnt/usb/boot/
 sudo cp /mnt/sdb/boot/corepure64.gz /mnt/usb/boot/
-sudo cp /mnt/sdb/boot/grub/grub.cfg /mnt/usb/grub/
+sudo cp /mnt/sdb/boot/grub/grub.cfg /mnt/usb/boot/grub/
 sudo cp -r /mnt/sdb/tce /mnt/usb
 # Unmount the USB drive and ISO
 sudo umount /mnt/usb
